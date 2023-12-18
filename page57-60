@@ -1,0 +1,21 @@
+a = 1+2
+print(a)
+
+for i in range(5):
+    b = i + 1
+    print("this is i number", b,"equal to", i)
+
+print('Hello World! - 1')
+print("Hello World! - 2")
+print(5*5)
+print('"5+5"')
+print("'5+5'")
+print('5+5')
+print((5+5)*5)
+print(5+5, 5, 5*5, 5-5)
+a = [5+5, 5, 5*5, 5-5]
+print(a)
+dir(5)#может использоваться для того, чтобы посмотреть, какие имеются атрибуты
+#(переменные, привязанные к объекту) и методы (функции, привязанные к объекту).
+print(dir(5))
+print(dir())

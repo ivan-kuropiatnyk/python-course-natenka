@@ -1,0 +1,22 @@
+!
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+service password-encryption
+service sequence-numbers
+!
+no ip domain lookup
+!
+ip ssh version 2
+!
+this string added directly 2d time
+HERE IS TEXT ADDED FROM THE LIST OF STRING:!service timestamps debug datetime msec localtime show-timezone yearservice timestamps log datetime msec localtime show-timezone yearservice password-encryptionservice sequence-numbers!no ip domain lookup!ip ssh version 2!
+TEXT AFTER CYCLE:! 
+service timestamps debug datetime msec localtime show-timezone year 
+service timestamps log datetime msec localtime show-timezone year 
+service password-encryption 
+service sequence-numbers 
+! 
+no ip domain lookup 
+! 
+ip ssh version 2 
+! 

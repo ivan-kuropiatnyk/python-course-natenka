@@ -1,0 +1,15 @@
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+r1-ansible(config)#logging 10.5.5.5
+r1-ansible(config)#end
+r1-ansible#
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+r3-ansible(config)#logging 10.5.5.5
+r3-ansible(config)#end
+r3-ansible#
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+r2-ansible(config)#logging 10.5.5.5
+r2-ansible(config)#end
+r2-ansible#

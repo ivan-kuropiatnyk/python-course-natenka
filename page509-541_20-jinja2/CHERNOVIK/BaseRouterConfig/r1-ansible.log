@@ -1,0 +1,85 @@
+﻿Connected:2023_10_20_Time:09_25_25_863_SessionR1-ANSIBLE[172.17.20.41]ssh
+r1-ansible#sh run
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname r1-ansible
+!
+boot-start-marker
+boot-end-marker
+!
+enable password qweszxc
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+aaa session-id common
+memory-size iomem 5
+ip arp proxy disable
+ip cef
+!
+no ip domain lookup
+ip domain name ip4it.click
+!
+multilink bundle-name authenticated
+!
+username ivankurop password 0 qweszxc
+archive
+ log config
+  hidekeys
+!
+ip ssh maxstartups 10
+ip ssh time-out 60
+ip ssh authentication-retries 5
+ip ssh source-interface FastEthernet0/0
+ip ssh logging events
+ip ssh version 2
+!
+interface Loopback111
+ description MADE IN ANSIBLE
+ ip address 1.1.1.1 255.255.255.255
+!
+interface FastEthernet0/0
+ description HOME-NETWORK
+ ip address 172.17.20.41 255.255.255.0
+ speed auto
+ full-duplex
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+control-plane
+!
+line con 0
+line aux 0
+line vty 0 4
+ logging synchronous
+ transport input telnet ssh
+ transport output telnet ssh
+!
+end

@@ -1,0 +1,19 @@
+r1-ansible#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            172.17.20.41    YES NVRAM  up                    up      
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down    
+FastEthernet1/0            unassigned      YES NVRAM  administratively down down    
+FastEthernet2/0            unassigned      YES NVRAM  administratively down down    
+Loopback111                1.1.1.1         YES NVRAM  up                    up      
+r2-ansible#sh arp
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  172.17.20.1            28   0007.7da7.4f14  ARPA   FastEthernet0/0
+Internet  172.17.20.42            -   c2da.67dd.0000  ARPA   FastEthernet0/0
+Internet  172.17.20.167           0   f0bf.97e7.da1c  ARPA   FastEthernet0/0
+Internet  172.17.20.192          29   5036.b001.dc00  ARPA   FastEthernet0/0
+r3-ansible#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            172.17.20.43    YES NVRAM  up                    up      
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down    
+FastEthernet1/0            unassigned      YES NVRAM  administratively down down    
+FastEthernet2/0            unassigned      YES NVRAM  administratively down down    

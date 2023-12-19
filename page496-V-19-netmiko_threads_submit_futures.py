@@ -1,0 +1,46 @@
+'''
+Python for network engineers Natasha Samoilenko
+'''
+# Page range 496
+# 19
+### 19.6
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pprint import pprint
+from datetime import datetime
+import time
+import logging
+import yaml
+from netmiko import ConnectHandler, NetMikoAuthenticationException
+logging.getLogger("paramiko").setLevel(logging.WARNING)
+logging.basicConfig(
+    format = '%(threadName)s %(name)s %(levelname)s: %(message)s',
+    level=logging.INFO)
+def send_show(device_dict, command):
+    start_msg = '===> {} Connection: {}'
+    received_msg = '<=== {} Received: {}'
+    ip = device_dict['host']
+    logging.info(start_msg.format(datetime.now().time(), ip))
+    if ip == '172.17.20.41': time.sleep(5)
+    with ConnectHandler(**device_dict) as ssh:
+        ssh.enable()
+        result = ssh.send_command(command)
+        logging.info(received_msg.format(datetime.now().time(), ip))
+    return {ip: result}
+def send_command_to_devices(devices, command):
+    data = {}
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        future_list = []
+        for device in devices:
+            future = executor.submit(send_show, device, command)
+            future_list.append(future)
+            print('Future: {} for device {}'.format(future, device['host']))
+        for f in as_completed(future_list):
+            result = f.result()
+            print('Future done {}'.format(f))
+            data.update(result)
+    return data
+
+if __name__ == '__main__':
+    with open('page485_19_devices.yaml') as f:
+        devices = yaml.safe_load(f)
+    print(send_command_to_devices(devices, 'sh clock'))

@@ -1,0 +1,19 @@
+r1-ansible#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            172.17.20.41    YES NVRAM  up                    up      
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down    
+FastEthernet1/0            unassigned      YES NVRAM  administratively down down    
+FastEthernet2/0            unassigned      YES NVRAM  administratively down down    
+Loopback111                1.1.1.1         YES NVRAM  up                    up      
+r2-ansible#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            172.17.20.42    YES NVRAM  up                    up      
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down    
+FastEthernet1/0            unassigned      YES NVRAM  administratively down down    
+FastEthernet2/0            unassigned      YES NVRAM  administratively down down    
+r3-ansible#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            172.17.20.43    YES NVRAM  up                    up      
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down    
+FastEthernet1/0            unassigned      YES NVRAM  administratively down down    
+FastEthernet2/0            unassigned      YES NVRAM  administratively down down    

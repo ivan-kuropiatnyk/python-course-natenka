@@ -1,0 +1,94 @@
+# -*- coding: utf-8 -*-
+
+"""
+Задание 22.1b
+
+Изменить класс Topology из задания 22.1a или 22.1.
+
+Добавить метод delete_link, который удаляет указанное соединение.
+Метод должен удалять и "обратное" соединение, если оно есть (ниже пример).
+
+Если такого соединения нет, выводится сообщение "Такого соединения нет".
+
+Создание топологии
+In [7]: t = Topology(topology_example)
+
+In [8]: t.topology
+Out[8]:
+{('R1', 'Eth0/0'): ('SW1', 'Eth0/1'),
+ ('R2', 'Eth0/0'): ('SW1', 'Eth0/2'),
+ ('R2', 'Eth0/1'): ('SW2', 'Eth0/11'),
+ ('R3', 'Eth0/0'): ('SW1', 'Eth0/3'),
+ ('R3', 'Eth0/1'): ('R4', 'Eth0/0'),
+ ('R3', 'Eth0/2'): ('R5', 'Eth0/0')}
+
+Удаление линка:
+In [9]: t.delete_link(('R3', 'Eth0/1'), ('R4', 'Eth0/0'))
+
+In [10]: t.topology
+Out[10]:
+{('R1', 'Eth0/0'): ('SW1', 'Eth0/1'),
+ ('R2', 'Eth0/0'): ('SW1', 'Eth0/2'),
+ ('R2', 'Eth0/1'): ('SW2', 'Eth0/11'),
+ ('R3', 'Eth0/0'): ('SW1', 'Eth0/3'),
+ ('R3', 'Eth0/2'): ('R5', 'Eth0/0')}
+
+Удаление "обратного" линка:
+в словаре есть запись ``('R3', 'Eth0/2'): ('R5', 'Eth0/0')``, но вызов delete_link
+с указанием ключа и значения в обратном порядке, должно удалять соединение:
+
+In [11]: t.delete_link(('R5', 'Eth0/0'), ('R3', 'Eth0/2'))
+
+In [12]: t.topology
+Out[12]:
+{('R1', 'Eth0/0'): ('SW1', 'Eth0/1'),
+ ('R2', 'Eth0/0'): ('SW1', 'Eth0/2'),
+ ('R2', 'Eth0/1'): ('SW2', 'Eth0/11'),
+ ('R3', 'Eth0/0'): ('SW1', 'Eth0/3')}
+
+Если такого соединения нет, выводится сообщение:
+In [13]: t.delete_link(('R5', 'Eth0/0'), ('R3', 'Eth0/2'))
+Такого соединения нет
+
+"""
+class Topology:
+    def __init__(self, topology_dict):
+        self.topology = self._normalize(topology_dict)
+
+    def _normalize(self, topology_dict):
+        correct_topo = {}
+        for key, value in topology_dict.items():
+            if correct_topo.get(key) != value and correct_topo.get(value) != key:
+                correct_topo[key] = value
+            else:
+                pass
+        return correct_topo
+
+    def delete_link(self, link_from, link_to):
+        if self.topology.get(link_from) == link_to:
+            print(f"{link_from}:{link_to} will be deleted")
+            del self.topology[link_from]
+        elif self.topology.get(link_to) == link_from:
+            print(f"{link_to}:{link_from} will be deleted")
+            del self.topology[link_to]
+        else:
+            print("Такого соединения нет")
+        return self.topology
+
+if __name__ == "__main__":
+    topology_example = {
+        ('R1', 'Eth0/0'): ('SW1', 'Eth0/1'),
+        ('R2', 'Eth0/0'): ('SW1', 'Eth0/2'),
+        ('R2', 'Eth0/1'): ('SW2', 'Eth0/11'),
+        ('R3', 'Eth0/0'): ('SW1', 'Eth0/3'),
+        ('R3', 'Eth0/1'): ('R4', 'Eth0/0'),
+        ('R3', 'Eth0/2'): ('R5', 'Eth0/0'),
+        ('SW1', 'Eth0/1'): ('R1', 'Eth0/0'),
+        ('SW1', 'Eth0/2'): ('R2', 'Eth0/0'),
+        ('SW1', 'Eth0/3'): ('R3', 'Eth0/0')
+    }
+    topo = Topology(topology_example)
+    topo.delete_link(('R5', 'Eth0/0'), ('R3', 'Eth0/2'))
+    topo.delete_link(('R1', 'Eth0/0'), ('SW1', 'Eth0/1'))
+    topo.delete_link(('R05641', 'Eth0/0'), ('SW1001', 'Eth0/1'))
+    print(topo.topology)

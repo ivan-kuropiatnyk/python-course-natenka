@@ -1,0 +1,38 @@
+# -*- coding: utf-8 -*-
+"""
+Задание 24.1
+
+Создать класс CiscoSSH, который наследует класс BaseSSH из файла base_connect_class.py.
+
+Создать метод __init__ в классе CiscoSSH таким образом, чтобы после подключения
+по SSH выполнялся переход в режим enable.
+
+Для этого в методе __init__ должен сначала вызываться метод __init__ класса BaseSSH,
+а затем выполняться переход в режим enable.
+
+In [2]: from task_24_1 import CiscoSSH
+
+In [3]: r1 = CiscoSSH(**device_params)
+
+In [4]: r1.send_show_command('sh ip int br')
+Out[4]: 'Interface                  IP-Address      OK? Method Status                Protocol
+Ethernet0/0                192.168.100.1   YES NVRAM  up                    up
+Ethernet0/1                192.168.200.1   YES NVRAM  up                    up
+Ethernet0/2                190.16.200.1    YES NVRAM  up                    up
+Ethernet0/3                192.168.230.1   YES NVRAM  up                    up
+Ethernet0/3.100            10.100.0.1      YES NVRAM  up                    up
+Ethernet0/3.200            10.200.0.1      YES NVRAM  up                    up
+Ethernet0/3.300            10.30.0.1       YES NVRAM  up                    up      '
+
+"""
+from page637_task_24_base_connect_class_My import BaseSSH
+import time
+
+class CiscoSSH(BaseSSH):
+    def __init__(self, **device_params):
+        super().__init__(**device_params)
+        self.ssh.enable()
+        time.sleep(1)
+if __name__ == "__main__":
+    r1 = CiscoSSH(ip = '172.17.20.41', username = 'ivankurop', password = 'qweszxc', device_type = 'cisco_ios', secret = 'qweszxc')
+    print(r1.send_show_command('sh clock'))

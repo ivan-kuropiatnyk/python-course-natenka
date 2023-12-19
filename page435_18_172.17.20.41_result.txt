@@ -1,0 +1,26 @@
+sh run
+Building configuration...
+
+Current configuration : 1983 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname r1-ansible
+!
+boot-start-marker
+boot-end-marker
+!
+enable password qweszxc
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+aaa session-id common
+ 

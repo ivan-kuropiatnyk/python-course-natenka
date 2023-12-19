@@ -1,0 +1,210 @@
+﻿Connected:2023_10_20_Time:09_27_13_886_SessionR10-mgm[172.17.20.4]ssh
+R10#sh run
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R10
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 32768
+logging rate-limit 100
+no logging monitor
+enable secret 5 $1$idqp$GoUVDDytyvFdTq8ahgrQ/1
+!
+aaa new-model
+!
+aaa authentication login default local
+aaa authorization exec default group radius local 
+aaa authorization network default group radius local 
+aaa accounting delay-start
+aaa accounting exec default start-stop group radius
+aaa accounting network default start-stop group radius
+!
+aaa server radius dynamic-author
+!
+aaa session-id common
+clock timezone EET 2 0
+clock summer-time EET recurring last Sun Mar 2:00 last Sun Oct 2:00
+ip arp proxy disable
+!
+ip domain name ip4it.link
+ip cef
+login on-failure log
+login on-success log
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+archive
+ log config
+  logging enable
+  logging size 1000
+  notify syslog contenttype plaintext
+  hidekeys
+username ivankurop secret 5 $1$Otf8$nJzugr2xK8/KXtHMYoISQ0
+!
+redundancy
+!
+!
+ip ssh logging events
+ip ssh version 2
+! 
+interface Loopback0
+ ip address 10.10.10.10 255.255.255.0
+!
+interface Loopback1
+ ip address 10.0.255.10 255.255.255.255
+!
+interface Loopback100
+ ip address 10.0.255.110 255.255.255.255
+!
+interface Loopback110
+ description LOOPBACK-ANSIBLE
+ ip address 10.110.110.110 255.255.255.255
+!
+interface Loopback200
+ ip address 10.0.255.210 255.255.255.255
+!
+interface Loopback255
+ ip address 10.255.255.10 255.255.255.255
+!
+interface FastEthernet0/0
+ ip address 172.17.20.4 255.255.255.0
+ duplex full
+!
+interface Ethernet1/0
+ description >[fa1/12]PNET-SW-INET_OSPF0
+ no ip address
+ duplex full
+!
+interface Ethernet1/0.10
+ description >OSPF_100_AREA_0-VLAN_10
+ encapsulation dot1Q 10
+ ip address 10.0.0.10 255.255.255.0
+!
+interface Ethernet1/1
+ description >[e1/1]R30
+ ip address 10.0.14.10 255.255.255.0
+ ip ospf network point-to-point
+ duplex full
+!
+interface Ethernet1/2
+ description >[e1/2]R10_OSPF0
+ ip address 10.0.12.10 255.255.255.0
+ ip ospf network point-to-point
+ duplex full
+!
+interface Ethernet1/3
+ description >[fa0/0]R212_OSPF21
+ ip address 10.21.101.10 255.255.255.0
+ ip ospf network point-to-point
+ duplex half
+!
+interface Ethernet1/4
+ no ip address
+ duplex full
+!
+interface Ethernet1/5
+ no ip address
+ duplex full
+!
+interface Ethernet1/6
+ no ip address
+ duplex full
+!
+interface Ethernet1/7
+ no ip address
+ duplex full
+!
+interface Ethernet2/0
+ no ip address
+ duplex full
+!
+interface Ethernet2/1
+ no ip address
+ duplex full
+!
+interface Ethernet2/2
+ no ip address
+ duplex full
+!
+interface Ethernet2/3
+ no ip address
+ duplex full
+!
+interface Ethernet2/4
+ no ip address
+ duplex full
+!
+interface Ethernet2/5
+ no ip address
+ duplex full
+!
+interface Ethernet2/6
+ no ip address
+ duplex full
+!
+interface Ethernet2/7
+ no ip address
+ duplex full
+!
+router ospf 100
+ router-id 10.0.0.10
+ redistribute connected subnets
+ redistribute static subnets
+ passive-interface default
+ no passive-interface Ethernet1/0.10
+ no passive-interface Ethernet1/1
+ no passive-interface Ethernet1/2
+ no passive-interface Ethernet1/3
+ network 10.0.0.0 0.0.0.255 area 0.0.0.0
+ network 10.0.12.0 0.0.0.255 area 0.0.0.0
+ network 10.0.14.0 0.0.0.255 area 0.0.0.0
+ network 10.21.101.0 0.0.0.255 area 21
+ default-information originate
+!
+ip forward-protocol nd
+ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 172.17.20.1 name ROUTE-DEFAULT-TO-FLAT-ASA
+ip route 185.121.81.200 255.255.255.255 172.17.20.1 name ROUTE-TO-NTP-SERVER-2
+ip route 188.165.18.162 255.255.255.255 172.17.20.1 name ROUTE-TO-NTP-SERVER-1
+!
+ip access-list extended IN_to_OUT
+ permit tcp 10.0.1.0 0.0.0.255 any eq www
+ permit tcp 10.0.1.0 0.0.0.255 any eq 22
+ permit icmp any any
+ deny   ip any any
+!
+control-plane
+!
+mgcp profile default
+!
+gatekeeper
+ shutdown
+!
+line con 0
+ logging synchronous
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ session-timeout 10 
+ session-limit 100
+ logging synchronous
+ transport input telnet ssh
+ transport output telnet ssh
+!
+ntp logging
+ntp master
+ntp server 217.31.202.100 minpoll 8 source FastEthernet0/0
+ntp server 131.188.3.221 prefer source FastEthernet0/0
+event manager applet COMM_ACC
+ event cli pattern ".*" sync no skip no occurs 1
+ action 1 syslog msg "User $_cli_username entered $_cli_msg on device $_cli_host "
+!
+end
